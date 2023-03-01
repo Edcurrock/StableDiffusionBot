@@ -2,11 +2,6 @@
 using Microsoft.Extensions.Logging;
 using StableDiffusion.Repositories;
 using StableDiffusion.Repositories.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StableDiffusion.Services.Services
 {
@@ -114,9 +109,9 @@ namespace StableDiffusion.Services.Services
                 return;
             }
 
-            if (command.Status.HasValue)
+            if (!string.IsNullOrWhiteSpace(command.Status))
             {
-                chat.Status = command.Status.Value;
+                chat.Status = command.Status;
             }
 
             if (!string.IsNullOrWhiteSpace(command.GeneratedImageId))

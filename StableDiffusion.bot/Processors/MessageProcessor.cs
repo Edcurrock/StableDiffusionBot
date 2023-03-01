@@ -1,13 +1,10 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
-//using StableDiffusionBot.Clients;
 using StableDiffusionBot.Collections;
 using StableDiffusionBot.Models;
 using StableDiffusionBot.Utility;
 using StableDiffusion.Services.Services;
 using StableDiffusionBot.Clients;
-//using StableDiffusionBot.Models;
-//using StableDiffusionBot.Utility;
 
 namespace StableDiffusionBot.Processors
 {
@@ -97,7 +94,8 @@ namespace StableDiffusionBot.Processors
             var result = await _service.GenerateImageAsync(new GenerateImageParams
             {
                 Prompt = chat.Prompt,
-                SourceImg = sourceImg == ChatCommandsCollection.GET_IMAGE_WITHOUT_SOURCE_IMG ? null : sourceImg,
+                SourceImg = sourceImg == ChatCommandsCollection.GET_IMAGE_WITHOUT_SOURCE_IMG ? 
+                                                                                    null : sourceImg,
             });
 
             if (string.IsNullOrWhiteSpace(result.Id))

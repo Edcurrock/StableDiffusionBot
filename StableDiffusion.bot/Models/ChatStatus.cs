@@ -7,6 +7,7 @@
         //ADD_IMAGE = 2,
         REQUEST = 2,
         PROCESSING = 3,
-        SETTINGS = 4
+        SETTINGS = 4,
+        AGAIN_SAME = 5,
     }
 }

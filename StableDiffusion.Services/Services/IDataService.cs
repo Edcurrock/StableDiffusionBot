@@ -23,7 +23,7 @@ namespace StableDiffusion.Services.Services
     public class EditChatCommand : Command
     {
         public long ChatId { get; set; }
-        public ChatStatus? Status { get; set; }
+        public string? Status { get; set; }
         public string? GeneratedImageId { get; set; }
     }
 
@@ -37,7 +37,7 @@ namespace StableDiffusion.Services.Services
 
     public class ChatInfo
     { 
-        public ChatStatus Status { get; set; }
+        public string Status { get; set; }
         public string? Prompt { get; set; }
         public string? LastGeneratedId { get; set; }
         public int Height { get; set; }

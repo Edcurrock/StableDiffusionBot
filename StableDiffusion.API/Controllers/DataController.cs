@@ -49,7 +49,7 @@ namespace StableDiffusion.API.Controllers
 
             return Ok(new ChatInfoResponse
             {
-                Status = (ChatInfoStatus)info.Status,
+                Status = info.Status,
                 LastGeneratedId = info.LastGeneratedId,
                 Prompt = info.Prompt,
                 Height = info.Height,
@@ -64,7 +64,7 @@ namespace StableDiffusion.API.Controllers
             var command = new EditChatCommand
             {
                 ChatId = chatId,
-                Status = (Repositories.Models.ChatStatus?)model.Status,
+                Status = model.Status,
                 GeneratedImageId = model.GeneratedImageId
             };
 
@@ -105,7 +105,7 @@ namespace StableDiffusion.API.Controllers
     #region models
     public class UpdateChatStatusModel
     {
-        public ChatInfoStatus? Status { get; set; }
+        public string? Status { get; set; }
         public string? GeneratedImageId { get; set; }
     }
     public class UpdateUserSettingsModel
@@ -117,21 +117,11 @@ namespace StableDiffusion.API.Controllers
 
     public class ChatInfoResponse
     {
-        public ChatInfoStatus Status { get; set; }
+        public string Status { get; set; }
         public string? Prompt { get; set; }
         public string? LastGeneratedId { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
-    }
-
-    public enum ChatInfoStatus // TODO Изменить статусы, если надо
-    {
-        BEGIN = 0,
-        ADD_PROMPT = 1,
-        //ADD_IMAGE = 2,
-        REQUEST = 2,
-        PROCESSING = 3,
-        SETTINGS = 4
     }
     #endregion
 }

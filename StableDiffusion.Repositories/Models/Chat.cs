@@ -9,17 +9,7 @@ namespace StableDiffusion.Repositories.Models
     public class Chat : Entity
     {
         public long ChatId { get; set; }
-        public ChatStatus Status { get; set; }
+        public string Status { get; set; } = "BEGIN";
         public string? LastGeneratedId { get; set; } // TODO убрать
-    }
-
-    public enum ChatStatus //TODO сделать через settings настройку prompt и тд
-    {
-        BEGIN = 0,
-        ADD_PROMPT = 1,
-        //ADD_IMAGE = 2, 
-        REQUEST = 2,
-        PROCESSING = 3,
-        SETTINGS = 4
     }
 }

@@ -15,10 +15,6 @@ namespace StableDiffusionBot.Processors
         private readonly ApiClient _apiClient;
         private readonly IAIImagesService _service;
         private readonly ILogger<MainProcessor> _logger;
-
-        //    private readonly ChatStatus[] ActionStatuses = new ChatStatus[] 
-        //                    { ChatStatus.CHOOSE_WAY, ChatStatus.ADD_NEW_TASK, ChatStatus.CONTINUE_TASK };
-
         public MainProcessor(TelegramBotStateMachine botStateMachine, ILogger<MainProcessor> logger, IAIImagesService service, ApiClient apiClient)
         {
             _botStateMachine = botStateMachine ?? throw new ArgumentNullException(nameof(botStateMachine));
@@ -35,19 +31,23 @@ namespace StableDiffusionBot.Processors
 
             if (IsBeginState(chat, msgText))
             {
-                nextStatus = await _botStateMachine.Run(ChatStatus.BEGIN.ToString(), chatId, botClient, "");
+                nextStatus = await _botStateMachine.Run(ChatStatus.BEGIN.ToString(), 
+                                        chatId, botClient, "");
             }
             else if ((ChatStatus)chat.Status == ChatStatus.ADD_PROMPT)
             {
-                nextStatus = await _botStateMachine.Run(ChatStatus.ADD_PROMPT.ToString(), chatId, botClient, msgText);
+                nextStatus = await _botStateMachine.Run(ChatStatus.ADD_PROMPT.ToString(), 
+                                        chatId, botClient, msgText);
             }
             else if ((ChatStatus)chat.Status == ChatStatus.REQUEST)
             {
-                nextStatus = await _botStateMachine.Run(ChatStatus.REQUEST.ToString(), chatId, botClient, msgText);
+                nextStatus = await _botStateMachine.Run(ChatStatus.REQUEST.ToString(), 
+                                        chatId, botClient, msgText);
             }
             else if ((ChatStatus)chat.Status == ChatStatus.PROCESSING)
             {
-                nextStatus = await _botStateMachine.Run(ChatStatus.PROCESSING.ToString(), chatId, botClient, msgText);
+                nextStatus = await _botStateMachine.Run(ChatStatus.PROCESSING.ToString(), 
+                                        chatId, botClient, msgText);
             }
             else
             {
