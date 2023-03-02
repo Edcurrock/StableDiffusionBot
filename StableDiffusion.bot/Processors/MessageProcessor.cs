@@ -108,11 +108,8 @@ namespace StableDiffusionBot.Processors
             else
             {
                 await botClient.SendTextMessageAsync(chatId,
-                   "Запрос выполнен! Скоро мы пришлем Ваше изображение:)");
+                   "Запрос выполнен! Скоро мы пришлем Ваше изображение :)");
             }
-
-            //TODO убрать это
-            //await UpdateChatLastGeneratedId(chatId, result.Id);
 
             //_logger.LogInformation($"Id of created image: ${result.Id}");
 
@@ -121,52 +118,65 @@ namespace StableDiffusionBot.Processors
             return processResult;
         }
 
-        public async Task<ChatStatus?> Process(long chatId, ITelegramBotClient botClient, object request, CancellationToken cancellationToken = default)
+        //public async Task<ChatStatus?> Process(long chatId, ITelegramBotClient botClient, object request, CancellationToken cancellationToken = default)
+        //{
+        //    var chat = await GetChatInfo(chatId);
+
+        //    if (chat is null)
+        //    {
+        //        await botClient.SendTextMessageAsync(chatId,
+        //              "Произошла ошибка. Пожалуйста, повторите действия");
+        //        await botClient.SendTextMessageAsync(chatId,
+        //            $"Введите {ChatCommandsCollection.BEGIN}, чтобы начать");
+        //        return ChatStatus.BEGIN;
+        //    }
+
+        //    var result = await _service.GetImageAsync(chat.LastGeneratedId);
+
+        //    if (result.Status == GetImageStatus.Processing)
+        //    {
+        //        await botClient.SendTextMessageAsync(chatId,
+        //                "Идет генерация, пожалуйста подождите");
+        //        return null; // TODO изменить логику 
+        //    }
+
+        //    if (result.Status == GetImageStatus.Failed)
+        //    {
+        //        await botClient.SendTextMessageAsync(chatId,
+        //            "Ошибка! Попробуйте заново!");
+        //        return ChatStatus.BEGIN; // TODO изменить логику 
+        //    }
+
+        //    if (result.Status != GetImageStatus.Ready)
+        //    {
+        //        return null;
+        //    }
+
+        //    using (var ms = new MemoryStream(result.Img))
+        //    {
+        //        var iof = new Telegram.Bot.Types.InputFiles.InputOnlineFile(ms, "generated.png");
+        //        await botClient.SendPhotoAsync(chatId, iof);
+        //    }
+
+        //    await ChatKeyboardsCollection.SendMenuKeyboard(botClient, chatId, true);
+
+        //    return ChatStatus.CHOOSE_LAST_WAY; // TODO изменить логику 
+        //}
+
+        public async Task<ChatStatus?> ChooseLastWay(long chatId, ITelegramBotClient botClient, object way, CancellationToken cancellationToken = default)
         {
-            var chat = await GetChatInfo(chatId);
+            var wayString = TypeHelper.GetTypedValue<string>(way);
 
-            if (chat is null)
+            if (wayString == ChatCommandsCollection.SAME_PROMPT)
             {
-                await botClient.SendTextMessageAsync(chatId,
-                      "Произошла ошибка. Пожалуйста, повторите действия");
-                await botClient.SendTextMessageAsync(chatId,
-                    $"Введите {ChatCommandsCollection.BEGIN}, чтобы начать");
-                return ChatStatus.BEGIN;
+                await ChatKeyboardsCollection.SendImageWayKeyboard(botClient, chatId);
+                return ChatStatus.REQUEST;
             }
 
-            var result = await _service.GetImageAsync(chat.LastGeneratedId);
-
-            if (result.Status == GetImageStatus.Processing)
-            {
-                await botClient.SendTextMessageAsync(chatId,
-                        "Идет генерация, пожалуйста подождите");
-                return null; // TODO изменить логику 
-            }
-
-            if (result.Status == GetImageStatus.Failed)
-            {
-                await botClient.SendTextMessageAsync(chatId,
-                    "Ошибка! Попробуйте заново!");
-                return ChatStatus.BEGIN; // TODO изменить логику 
-            }
-
-            if (result.Status != GetImageStatus.Ready)
-            {
-                return null;
-            }
-
-            using (var ms = new MemoryStream(result.Img))
-            {
-                var iof = new Telegram.Bot.Types.InputFiles.InputOnlineFile(ms, "generated.png");
-                await botClient.SendPhotoAsync(chatId, iof);
-            }
-
-            await ChatKeyboardsCollection.SendMenuKeyboard(botClient, chatId);
-
-            return ChatStatus.BEGIN; // TODO изменить логику 
+            return ChatStatus.BEGIN;
         }
 
-        public async Task<ChatStatus?> ProcessImage(long chatId, ITelegramBotClient botClient, string lastGeneratedId)
+        private async Task<ChatStatus?> ProcessImage(long chatId, ITelegramBotClient botClient, string lastGeneratedId)
         {
             var result = await _service.GetImageAsync(lastGeneratedId);
 
@@ -189,18 +199,12 @@ namespace StableDiffusionBot.Processors
                 await botClient.SendPhotoAsync(chatId, iof);
             }
 
-            await ChatKeyboardsCollection.SendMenuKeyboard(botClient, chatId);
+            await ChatKeyboardsCollection.SendMenuKeyboard(botClient, chatId, samePrompt: true);
 
-            return ChatStatus.BEGIN; // TODO изменить логику 
+            return ChatStatus.CHOOSE_LAST_WAY; // TODO изменить логику 
         }
 
-        private async Task UpdateChatLastGeneratedId(long chatId, string? imageId) // TODO повторяющийся код в MainProcessor
-        {
-            await _apiClient.ChatsPUTAsync(chatId, new UpdateChatStatusModel
-            {
-                GeneratedImageId = imageId
-            });
-        }
+
 
         private async Task<ChatInfoResponse?> GetChatInfo(long chatId)
         {

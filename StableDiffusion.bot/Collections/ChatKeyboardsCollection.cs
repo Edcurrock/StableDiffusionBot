@@ -17,12 +17,18 @@ namespace StableDiffusionBot.Collections
 
             await SendInlineKeyboard(botClient, chatId, new InlineKeyboardMarkup(result), "Что делаем дальше?");
         }
-        public static async Task SendMenuKeyboard(ITelegramBotClient botClient, long chatId)
+        public static async Task SendMenuKeyboard(ITelegramBotClient botClient, long chatId, bool samePrompt = false)
         {
             var menu = new[]
-           {
+            {
                 new[] { new KeyboardButton(ChatCommandsCollection.RETRY) }
             };
+
+            if (samePrompt)
+            {
+                menu[0] = new[] { new KeyboardButton(ChatCommandsCollection.RETRY), new KeyboardButton(ChatCommandsCollection.SAME_PROMPT) };
+            }
+
             await SendKeyboard(botClient, chatId, menu, "Попробуем еще раз?");
         }
 

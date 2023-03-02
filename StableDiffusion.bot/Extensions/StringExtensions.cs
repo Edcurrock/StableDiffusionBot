@@ -12,7 +12,7 @@ namespace StableDiffusionBot.Extensions
                 "ADD_PROMPT" => ChatStatus.ADD_PROMPT,
                 "REQUEST" => ChatStatus.REQUEST,
                 "PROCESSING" => ChatStatus.PROCESSING,
-                "AGAIN_SAME" => ChatStatus.AGAIN_SAME,
+                "CHOOSE_LAST_WAY" => ChatStatus.CHOOSE_LAST_WAY,
                 _ => null,
             };
 

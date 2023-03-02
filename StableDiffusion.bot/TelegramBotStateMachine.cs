@@ -30,7 +30,8 @@ namespace StableDiffusionBot
             AddTransition(ChatStatus.BEGIN.ToString(), _messageProcessor.Begin);
             AddTransition(ChatStatus.ADD_PROMPT.ToString(), _messageProcessor.AddPrompt);
             AddTransition(ChatStatus.REQUEST.ToString(), _messageProcessor.DoRequest);
-            AddTransition(ChatStatus.PROCESSING.ToString(), _messageProcessor.Process);
+            //AddTransition(ChatStatus.PROCESSING.ToString(), _messageProcessor.Process);
+            AddTransition(ChatStatus.CHOOSE_LAST_WAY.ToString(), _messageProcessor.ChooseLastWay);
             //AddTransition(ChatStatus.SETTINGS.ToString(), _messageProcessor.OpenSettings());
             //AddTransition(ChatStatus.CONTINUE_TASK.ToString(), _messageProcessor.ContinueAddTask);
         }

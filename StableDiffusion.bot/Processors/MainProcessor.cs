@@ -1,11 +1,9 @@
 ﻿using Telegram.Bot;
-//using StableDiffusionBot.Clients;
 using StableDiffusionBot.Collections;
 using StableDiffusion.Services.Services;
 using StableDiffusionBot.Models;
 using StableDiffusionBot.Clients;
-//using StableDiffusionBot.Extensions;
-//using StableDiffusionBot.Models;
+using StableDiffusionBot.Extensions;
 
 namespace StableDiffusionBot.Processors
 {
@@ -34,19 +32,24 @@ namespace StableDiffusionBot.Processors
                 nextStatus = await _botStateMachine.Run(ChatStatus.BEGIN.ToString(), 
                                         chatId, botClient, "");
             }
-            else if ((ChatStatus)chat.Status == ChatStatus.ADD_PROMPT)
+            else if (chat.Status.ToChatStatus() == ChatStatus.ADD_PROMPT)
             {
                 nextStatus = await _botStateMachine.Run(ChatStatus.ADD_PROMPT.ToString(), 
                                         chatId, botClient, msgText);
             }
-            else if ((ChatStatus)chat.Status == ChatStatus.REQUEST)
+            else if (chat.Status.ToChatStatus() == ChatStatus.REQUEST)
             {
                 nextStatus = await _botStateMachine.Run(ChatStatus.REQUEST.ToString(), 
                                         chatId, botClient, msgText);
             }
-            else if ((ChatStatus)chat.Status == ChatStatus.PROCESSING)
+            else if (chat.Status.ToChatStatus() == ChatStatus.PROCESSING)
             {
                 nextStatus = await _botStateMachine.Run(ChatStatus.PROCESSING.ToString(), 
+                                        chatId, botClient, msgText);
+            }
+            else if (chat.Status.ToChatStatus() == ChatStatus.CHOOSE_LAST_WAY)
+            {
+                nextStatus = await _botStateMachine.Run(ChatStatus.CHOOSE_LAST_WAY.ToString(),
                                         chatId, botClient, msgText);
             }
             else
@@ -62,9 +65,11 @@ namespace StableDiffusionBot.Processors
 
         private async Task UpdateChat(long chatId, ChatStatus? status)
         {
+            var statusName = status.HasValue? status.ToString() : string.Empty;
+
             await _apiClient.ChatsPUTAsync(chatId, new UpdateChatStatusModel 
             {
-                Status = (ChatInfoStatus?)status,
+                Status = statusName,
             });
         }
 
@@ -75,7 +80,7 @@ namespace StableDiffusionBot.Processors
                 return true;
             }
 
-            var isBeginStatus = (ChatStatus)chat.Status == ChatStatus.BEGIN ||
+            var isBeginStatus = chat.Status.ToChatStatus() == ChatStatus.BEGIN ||
                                     msgText.ToLowerInvariant() == ChatCommandsCollection.BEGIN;
 
             var isCancelStatus = msgText.ToLowerInvariant() == ChatCommandsCollection.CANCEL;

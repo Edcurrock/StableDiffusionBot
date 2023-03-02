@@ -31,7 +31,6 @@ namespace StableDiffusionBot.Clients
             _baseUrl = _httpClient.BaseAddress.ToString();
         }
 
-
         private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
         {
             var settings = new Newtonsoft.Json.JsonSerializerSettings();
@@ -463,8 +462,8 @@ namespace StableDiffusionBot.Clients
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ChatInfoResponse
     {
-        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ChatInfoStatus Status { get; set; }
+        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Status { get; set; }
 
         [Newtonsoft.Json.JsonProperty("prompt", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Prompt { get; set; }
@@ -481,26 +480,10 @@ namespace StableDiffusionBot.Clients
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum ChatInfoStatus
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-        _3 = 3,
-
-        _4 = 4,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class UpdateChatStatusModel
     {
-        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ChatInfoStatus? Status { get; set; }
+        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Status { get; set; }
 
         [Newtonsoft.Json.JsonProperty("generatedImageId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string GeneratedImageId { get; set; }

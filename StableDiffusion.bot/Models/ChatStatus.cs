@@ -8,6 +8,6 @@
         REQUEST = 2,
         PROCESSING = 3,
         SETTINGS = 4,
-        AGAIN_SAME = 5,
+        CHOOSE_LAST_WAY = 5,
     }
 }
